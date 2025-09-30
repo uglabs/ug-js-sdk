@@ -31,7 +31,8 @@
   ],
   "dependencies": {
     "@ricky0123/vad-web": "^0.0.23",
-    "axios": "^1.8.2"
+    "axios": "^1.8.2",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
