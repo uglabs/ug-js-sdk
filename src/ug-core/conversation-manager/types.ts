@@ -1,0 +1,14 @@
+export interface IConversationManager {
+  initialize(): Promise<void>
+  startListening(): Promise<void>
+  stopListening(): Promise<void>
+  sendText(text: string): Promise<void>
+  interrupt(): Promise<void>
+  pause(): Promise<void>
+  resume(): Promise<void>
+  forceInputComplete(): Promise<void>
+  stop(): Promise<void>
+  toggleTextOnlyInput(isTextOnly: boolean): Promise<void>
+  updateContextValues(newValues: Record<string, string | number | boolean>): void
+  on(event: string, listener: (...args: any[]) => void): void
+}

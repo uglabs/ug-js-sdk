@@ -1,0 +1,6 @@
+<script>
+    // Redirect all 404s to index.html with correct path
+    var redirectTo = location.pathname + location.search + location.hash;
+    sessionStorage.redirect = redirectTo;
+    window.location.href = '/';
+  </script>
