@@ -19,7 +19,7 @@ module.exports = {
   },
   output: {
     filename: 'ug-js-sdk-bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public/dist'),
     library: 'uglabs',
     libraryTarget: 'umd',
     globalObject: 'this',

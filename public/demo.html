@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UG JS SDK Demo</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <h1>UG JS SDK Demo</h1>
+  <div class="callout">
+    <p>Please login to <a href="https://pug-playground.stg.uglabs.app/service-accounts" target="_blank">pug-playground.stg.uglabs.app/service-accounts</a> and click "Create Service Account" to get a Service Account API Key.</p>
+  </div>
+  <label for="apiKey">API Key:</label>
+  <input type="text" id="apiKey" placeholder="Enter Service Account API Key" style="width: 300px;">
+  <br>
+  <label for="serverUrlInput">API URL:</label>
+  <input type="text" id="serverUrlInput" placeholder="Override Server URL" style="width: 300px;">
+  <span class="hint-text"> (no need to modify)</span>
+  <br><br>
+  <button id="startButton">Start</button>
+  <button id="stopButton">Stop</button>
+  <br><br>
+  <input type="text" id="textInput" placeholder="Enter text to send" />
+  <button id="sendButton">Send</button>
+  <br><br>
+  <div id="errorMessage" class="error-message"></div>
+  <div>State: <span id="state">uninitialized</span></div>
+  <div>Subtitle: <span id="subtitle"></span></div>
+
+  <script src="dist/ug-js-sdk-bundle.js"></script>
+  <script>
+    const DEFAULT_UG_SERVER_URL = 'https://pug.stg.uglabs.app/api/';
+    
+    const playbackCapabilities = {
+      audio: false, // This demo is text only
+      viseme: false, // Unused
+      subtitles: true,
+      avatar: false,
+    }
+    const inputCapabilities = {
+      audio: false,
+      text: true,
+    }
+    const hooks = {
+      onStateChange: (state) => {
+        console.log('State changed:', state);
+        document.getElementById('state').textContent = state;
+      },
+      onSubtitleChange: (event) => {
+        console.log('Subtitle changed:', event);
+        document.getElementById('subtitle').textContent = event.subtitle;
+      },
+      onError: (error) => {
+        console.error('Conversation error:', error);
+        debugger;
+        displayError(error.message || 'An unknown error occurred.');
+      },
+    };
+
+    const apiKeyInput = document.getElementById('apiKey');
+    const serverUrlInput = document.getElementById('serverUrlInput');
+    serverUrlInput.value = DEFAULT_UG_SERVER_URL; // Set default value
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const textInput = document.getElementById('textInput');
+    const sendButton = document.getElementById('sendButton');
+    const stateDiv = document.getElementById('state');
+    const subtitleDiv = document.getElementById('subtitle');
+    const errorMessageDiv = document.getElementById('errorMessage');
+
+    let conversationManager;
+
+    function displayError(message) {
+      errorMessageDiv.textContent = message;
+      errorMessageDiv.style.display = 'block';
+    }
+
+    function clearError() {
+      errorMessageDiv.textContent = '';
+      errorMessageDiv.style.display = 'none';
+    }
+
+    // A wrapper to handle async actions and display errors.
+    async function handleAction(action) {
+      clearError();
+      try {
+        await action();
+      } catch (error) {
+        console.error(error);
+        displayError(error.message || error);
+      }
+    }
+
+    startButton.addEventListener('click', async () => {
+      const config = {
+        capabilities: playbackCapabilities,
+        inputCapabilities: inputCapabilities,
+        apiUrl: serverUrlInput.value || DEFAULT_UG_SERVER_URL,
+        apiKey: apiKeyInput.value,
+        hooks: hooks,
+      };
+
+      conversationManager = new uglabs.ConversationManager(config);
+
+      await handleAction(async () => {
+        await conversationManager.initialize();
+        await conversationManager.startListening();
+      });
+    });
+
+    stopButton.addEventListener('click', async () => {
+      if (!conversationManager) return;
+      await handleAction(() => conversationManager.stop());
+    });
+
+    sendButton.addEventListener('click', async () => {
+      if (!conversationManager) return;
+      await handleAction(async () => {
+        await conversationManager.sendText(textInput.value);
+        textInput.value = '';
+      });
+    });
+  </script>
+</body>
+</html>

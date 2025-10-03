@@ -13,9 +13,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "bundle": "webpack",
-    "test": "jest -passWithNoTests",
+    "test": "jest",
     "format": "prettier --write \"**/*.{js,ts,json,css,md}\"",
-    "prepublishOnly": "npm run build && npm run bundle"
+    "prepublishOnly": "npm run build && npm run bundle",
+    "serve:demo": "webpack --watch & http-server public -o /demo.html"
   },
   "author": "Gal Bracha <gal.bracha@uglabs.io>",
   "license": "MIT",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "http-server": "^14.1.1",
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.4",

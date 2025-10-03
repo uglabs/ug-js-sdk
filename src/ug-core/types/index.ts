@@ -6,11 +6,11 @@ import {
 import { AudioRecordingConfig } from '@/ug-core/user-input-manager'
 
 export interface ILogger {
-  trace(mesefsage: string, data?: any): void
-  debug(message: string, data?: any): void
-  info(message: string, data?: any): void
-  warn(message: string, data?: any): void
-  error(message: string, data?: any): void
+  trace(message: string, ...args: any[]): void
+  debug(message: string, ...args: any[]): void
+  info(message: string, ...args: any[]): void
+  warn(message: string, ...args: any[]): void
+  error(message: string, ...args: any[]): void
 }
 
 export interface PlaybackCapabilities {
@@ -26,8 +26,8 @@ export interface InputCapabilities {
 }
 
 export interface ConversationConfig {
-  serverUrl: string
-  authToken?: string
+  apiUrl: string
+  apiKey: string
   imageFrame?: string
   personaId?: string
   prompt: string
@@ -63,7 +63,7 @@ export type ConversationState =
   | 'error'
 
 export interface ConversationError {
-  type: 'mic_denied' | 'network_timeout' | 'server_error' | 'decode_error'
+  type: 'mic_denied' | 'network_timeout' | 'network_error' | 'server_error' | 'decode_error'
   message: string
   originalError?: Error
 }

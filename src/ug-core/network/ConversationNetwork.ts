@@ -21,6 +21,8 @@ import {
   SetConfigurationResponse,
 } from '../types'
 
+import API from './api'
+
 const audioConfig: AudioConfig = {
   sampling_rate: 48000,
   mime_type: 'audio/mpeg',
@@ -28,6 +30,7 @@ const audioConfig: AudioConfig = {
 
 export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   private wsConnection: WebSocketConnection | null = null
+  private _api: API | null = null;
   private pendingRequests = new Map<
     string,
     {
@@ -39,17 +42,38 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   >()
 
   constructor(
-    private authToken: string,
-    private serverUrl: string,
+    private apiUrl: string,
+    private apiKey: string,
     private prompt: string,
     private contextValues?: Record<string, string | number | boolean>
   ) {
     const logger = new DefaultLogger({ category: '🗣️ConversationNetwork', style: StyleGrey })
     super(logger)
+    this._api = new API({apiUrl, apiKey})
+  }
+
+  async initialize() {
+    try {
+      await this._api.login()
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.error || error.message || 'Authentication failed'
+      const traceback = error.response?.data?.traceback
+      if (traceback) {
+        this.logger.error('Authentication failed:', errorMessage, '\nTraceback:', traceback)
+      } else {
+        this.logger.error('Authentication failed:', errorMessage)
+      }
+      const err = new Error(errorMessage)
+      if (traceback) {
+        // @ts-ignore
+        err.traceback = traceback
+      }
+      throw err
+    }
   }
 
   async connect(): Promise<void> {
-    this.wsConnection = new WebSocketConnection(this.serverUrl, this.getWebSocketHandlers())
+    this.wsConnection = new WebSocketConnection(this.apiUrl, this.getWebSocketHandlers())
     this.wsConnection.connect()
     this.logger.debug('Network connections established - Authenticating next...')
   }
@@ -93,12 +117,14 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
           this.emit(ConversationNetworkEvents.Message, message)
         } else if (message.kind === 'error') {
           this.logger.error(message.error)
+          debugger;
           await this.emit(ConversationNetworkEvents.Error, message.error)
         } else {
           this.logger.warn('Received message without a matching request UID', message)
         }
       },
       onError: async (error) => {
+        debugger;
         await this.emit(ConversationNetworkEvents.Error, error)
       },
       onClose: async () => {
@@ -145,7 +171,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     const request: AuthenticateRequest = {
       type: 'request',
       kind: 'authenticate',
-      access_token: this.authToken,
+      access_token: this._api.authToken,
       uid: '', // will be set by makeRequest
     }
     await this.makeRequest<AuthenticateResponse>(request)

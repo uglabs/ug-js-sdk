@@ -54,8 +54,8 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
     // Dependency injection
     this.network = new ConversationNetwork(
-      config.authToken!,
-      config.serverUrl,
+      config.apiUrl,
+      config.apiKey,
       config.prompt,
       config.contextValues
     )
@@ -77,6 +77,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     try {
       this.logger.debug('Initializing...')
       this.setState('initializing')
+      await this.network.initialize()
       this.playbackManager.initialize()
 
       if (this.config.inputCapabilities?.audio && !this.mediaStream) {
@@ -267,7 +268,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     })
 
     this.network.on(ConversationNetworkEvents.Error, async (error: Error) => {
-      this.handleError('network_timeout', error)
+      this.handleError('network_error', error)
     })
 
     this.playbackManager.on(PlaybackManagerEvents.PlaybackError, async (error: any) => {
