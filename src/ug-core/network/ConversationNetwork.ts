@@ -117,14 +117,12 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
           this.emit(ConversationNetworkEvents.Message, message)
         } else if (message.kind === 'error') {
           this.logger.error(message.error)
-          debugger;
           await this.emit(ConversationNetworkEvents.Error, message.error)
         } else {
           this.logger.warn('Received message without a matching request UID', message)
         }
       },
       onError: async (error) => {
-        debugger;
         await this.emit(ConversationNetworkEvents.Error, error)
       },
       onClose: async () => {
