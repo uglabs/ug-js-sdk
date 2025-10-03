@@ -17,6 +17,10 @@
   <label for="serverUrlInput">API URL:</label>
   <input type="text" id="serverUrlInput" placeholder="Override Server URL" style="width: 300px;">
   <span class="hint-text"> (no need to modify)</span>
+  <br>
+  <label for="promptInput">Prompt:</label>
+  <br>
+  <textarea id="promptInput" rows="4"></textarea>
   <br><br>
   <button id="startButton">Start</button>
   <button id="stopButton">Stop</button>
@@ -60,6 +64,8 @@
     const apiKeyInput = document.getElementById('apiKey');
     const serverUrlInput = document.getElementById('serverUrlInput');
     serverUrlInput.value = DEFAULT_UG_SERVER_URL; // Set default value
+    const promptInput = document.getElementById('promptInput');
+    promptInput.value = "a game of Scattegories where the user needs to say a country that starts with the letter B";
     const startButton = document.getElementById('startButton');
     const stopButton = document.getElementById('stopButton');
     const textInput = document.getElementById('textInput');
@@ -97,6 +103,7 @@
         inputCapabilities: inputCapabilities,
         apiUrl: serverUrlInput.value || DEFAULT_UG_SERVER_URL,
         apiKey: apiKeyInput.value,
+        prompt: promptInput.value,
         hooks: hooks,
       };
 

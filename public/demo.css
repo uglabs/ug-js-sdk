@@ -73,3 +73,14 @@ span {
   font-size: 0.9em; /* Consistent with callout and hint text */
   display: none; /* Hidden by default */
 }
+
+textarea {
+  width: 300px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  resize: vertical;
+}

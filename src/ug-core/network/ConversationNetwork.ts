@@ -73,6 +73,8 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   }
 
   async connect(): Promise<void> {
+    // Cleanly remove the trailing '/api' (with or without slash) and add '/interact'
+    let wsUrl = this.apiUrl.replace(/\/api\/?$/, '') + '/interact';
     this.wsConnection = new WebSocketConnection(this.apiUrl, this.getWebSocketHandlers())
     this.wsConnection.connect()
     this.logger.debug('Network connections established - Authenticating next...')
