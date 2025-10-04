@@ -33,6 +33,7 @@ export interface ConversationConfig {
   prompt: string
   contextValues?: Record<string, string | number | boolean>
   hooks: {
+    onTextMessage?: (event: TextEvent) => void
     onStringMessage?(message: StringMessage): unknown
     onStateChange: (state: ConversationState) => void
     onSubtitleHighlight: (event: WordHighlightEvent) => void

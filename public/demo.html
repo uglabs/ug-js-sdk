@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UG JS SDK Demo</title>
+  <link href="assets/images/favicon.svg" rel="shortcut icon" type="image/x-icon">
   <link rel="stylesheet" href="demo.css">
 </head>
 <body>
@@ -30,7 +31,7 @@
   <br><br>
   <div id="errorMessage" class="error-message"></div>
   <div>State: <span id="state">uninitialized</span></div>
-  <div>Subtitle: <span id="subtitle"></span></div>
+  <div>Text: <span id="text"></span></div>
 
   <script src="dist/ug-js-sdk-bundle.js"></script>
   <script>
@@ -47,13 +48,17 @@
       text: true,
     }
     const hooks = {
+      onTextMessage: (event) => {
+        console.log('Text message received:', event);
+        document.getElementById('text').textContent += event.text;
+      },
       onStateChange: (state) => {
         console.log('State changed:', state);
         document.getElementById('state').textContent = state;
       },
       onSubtitleChange: (event) => {
         console.log('Subtitle changed:', event);
-        document.getElementById('subtitle').textContent = event.subtitle;
+        // document.getElementById('subtitle').textContent = event.subtitle;
       },
       onError: (error) => {
         console.error('Conversation error:', error);
@@ -71,8 +76,14 @@
     const textInput = document.getElementById('textInput');
     const sendButton = document.getElementById('sendButton');
     const stateDiv = document.getElementById('state');
-    const subtitleDiv = document.getElementById('subtitle');
+    const textDiv = document.getElementById('text');
     const errorMessageDiv = document.getElementById('errorMessage');
+
+    // Load API key from local storage
+    const savedApiKey = localStorage.getItem('apiKey');
+    if (savedApiKey) {
+      apiKeyInput.value = savedApiKey;
+    }
 
     let conversationManager;
 
@@ -98,6 +109,12 @@
     }
 
     startButton.addEventListener('click', async () => {
+      document.getElementById('text').textContent = ''; // Clear previous text
+
+      // Save API key to local storage
+      if (apiKeyInput.value) {
+        localStorage.setItem('apiKey', apiKeyInput.value);
+      }
       const config = {
         capabilities: playbackCapabilities,
         inputCapabilities: inputCapabilities,

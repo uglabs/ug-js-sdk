@@ -15,8 +15,8 @@
     "bundle": "webpack",
     "test": "jest",
     "format": "prettier --write \"**/*.{js,ts,json,css,md}\"",
-    "prepublishOnly": "npm run build && npm run bundle",
-    "serve:demo": "webpack --watch & http-server public -o /demo.html"
+    "pre-publish": "npm run build && npm run bundle",
+    "serve:demo": "npm run pre-publish && http-server public -o /demo.html"
   },
   "author": "Gal Bracha <gal.bracha@uglabs.io>",
   "license": "MIT",

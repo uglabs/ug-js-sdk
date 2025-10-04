@@ -236,6 +236,9 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     })
 
     this.network.on(ConversationNetworkEvents.Message, async (message: any) => {
+      if (message.kind === 'interact' && message.event === 'text') {
+        this.config.hooks.onTextMessage?.(message)
+      }
       if (message.kind === 'check_turn' && message.is_user_still_speaking === false) {
         this.logger.debug(`check_turn handler: state is ${this.state}`)
         if (this.state === 'playing' || this.state === 'paused') {
