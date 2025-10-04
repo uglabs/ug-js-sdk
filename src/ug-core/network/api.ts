@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
-import { ENV_CONFIGS } from './config'
 import LocalStorage from '../core/localStorage'
 const REQUEST_ID_HEADER = 'x-request-id'
 
@@ -10,22 +9,10 @@ class Api {
   private _apiKey?: string
   apiClient: AxiosInstance
 
-  constructor({ apiUrl }: { apiUrl?: string } = {}) {
-    // If user provides environment variables, use those instead of PRD/DEV logic
-    const userApiUrl = process.env.API_URL
-
-    const isEnvVariablesSet = userApiUrl
-    if (isEnvVariablesSet) {
-      this.apiUrl = userApiUrl
-    } else {
-      const hostname = window.location.hostname
-      const envConfig =
-        Object.values(ENV_CONFIGS).find((config) => config.hostnamePattern(hostname)) ||
-        ENV_CONFIGS.local
-      this.apiUrl = apiUrl || envConfig.apiUrl
-      this._apiKey = envConfig.apiKey
-      this._authToken = LocalStorage.getWithExpiry<string>('authToken') || undefined
-    }
+  constructor({ apiUrl, apiKey }: { apiUrl?: string, apiKey?: string } = {}) {
+    this.apiUrl = apiUrl
+    this._apiKey = apiKey
+    this._authToken = LocalStorage.getWithExpiry<string>('authToken') || undefined
 
     this.apiClient = axios.create({
       baseURL: this.apiUrl,
@@ -36,6 +23,21 @@ class Api {
     this.setInterceptors()
   }
 
+  public async login() {
+    const isAuthenticated = Boolean(LocalStorage.getWithExpiry('authToken') || this.authToken)
+    if (!isAuthenticated) {
+      try {
+        await this.loginWithApiKey()
+      } catch (error) {
+        console.error('Failed to authenticate with client credentials.', error)
+        // Clear any invalid tokens
+        LocalStorage.removeItem('authToken')
+        this._authToken = undefined
+        throw error
+      }
+    }
+  }
+
   private setInterceptors() {
     // Add authentication check interceptor
     this.apiClient.interceptors.request.use(
@@ -44,18 +46,7 @@ class Api {
         if (config.url?.includes('/auth/login')) {
           return config
         }
-
-        const isAuthenticated = Boolean(LocalStorage.getWithExpiry('authToken') || this.authToken)
-        if (!isAuthenticated) {
-          try {
-            await this.loginWithApiKey(this._apiKey || '')
-          } catch (error) {
-            console.error('Failed to authenticate with client credentials:', error)
-            // Clear any invalid tokens
-            LocalStorage.removeItem('authToken')
-            this._authToken = undefined
-          }
-        }
+        this.login()
         return config
       },
       (error) => Promise.reject(error)
@@ -141,9 +132,9 @@ class Api {
   }
 
   // Exchanges api key with access token
-  async loginWithApiKey(apiKey?: string | null): Promise<string> {
+  async loginWithApiKey(): Promise<string> {
     const response = await this.apiClient.post('/auth/login', {
-      api_key: apiKey || this._apiKey,
+      api_key: this._apiKey,
     })
     this.authToken = response.data.access_token
     this.apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`

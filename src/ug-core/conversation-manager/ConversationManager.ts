@@ -54,8 +54,8 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
     // Dependency injection
     this.network = new ConversationNetwork(
-      config.authToken!,
-      config.serverUrl,
+      config.apiUrl,
+      config.apiKey,
       config.prompt,
       config.contextValues
     )
@@ -77,6 +77,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     try {
       this.logger.debug('Initializing...')
       this.setState('initializing')
+      await this.network.initialize()
       this.playbackManager.initialize()
 
       if (this.config.inputCapabilities?.audio && !this.mediaStream) {
@@ -131,11 +132,12 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       this.logger.warn('Network is not ready, cannot send text')
       return
     }
-    if (this.state === 'idle') {
+    if (this.state === 'idle' || this.state === 'listening') {
       try {
         await this.setState('sending')
         await this.userInputManager.sendText(text)
       } catch (error) {
+        await this.setState('error')
         this.logger.error('Error sending text message', error)
         this.handleError('network_timeout', error as Error)
       }
@@ -178,7 +180,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     await this.userInputManager.stop()
     this.playbackManager.pause()
     await this.network.disconnect()
-    this.setState('idle')
+    await this.setState('idle')
   }
 
   private async setState(newState: ConversationState): Promise<void> {
@@ -235,6 +237,9 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     })
 
     this.network.on(ConversationNetworkEvents.Message, async (message: any) => {
+      if (message.kind === 'interact' && message.event === 'text') {
+        this.config.hooks.onTextMessage?.(message)
+      }
       if (message.kind === 'check_turn' && message.is_user_still_speaking === false) {
         this.logger.debug(`check_turn handler: state is ${this.state}`)
         if (this.state === 'playing' || this.state === 'paused') {
@@ -267,7 +272,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     })
 
     this.network.on(ConversationNetworkEvents.Error, async (error: Error) => {
-      this.handleError('network_timeout', error)
+      this.handleError('network_error', error)
     })
 
     this.playbackManager.on(PlaybackManagerEvents.PlaybackError, async (error: any) => {
@@ -281,7 +286,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
 
     this.playbackManager.on(PlaybackManagerEvents.Finished, async () => {
       // only if the last state was set by playback manager such as
-      //playing - so to prever change to userTalking state and others
+      //playing - so to prevent change to userTalking state and other states
       if (this.state === 'playing') {
         this.userInputManager.reset()
         await this.setState('idle')
@@ -323,7 +328,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
 
   private async handleInteractionComplete(): Promise<void> {
     this.logger.debug('Interaction complete received, flushing audio and starting new interaction')
-
+    debugger;
     // Reset AboutToComplete logic immediately to prevent late events
     this.playbackManager.resetAboutToComplete()
 
@@ -338,6 +343,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
   private async startNewInteraction() {
     this.userInputManager.reset()
     this.userInputManager.flushBufferedAudio()
+    await this.setState('idle')
     await this.userInputManager.start()
   }
 

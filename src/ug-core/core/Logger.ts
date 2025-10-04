@@ -41,6 +41,17 @@ export class DefaultLogger implements ILogger {
     let msg = message
     const filteredArgs = args.filter((arg) => arg !== undefined)
 
+    const processedArgs = filteredArgs.map((arg) => {
+      if (typeof arg === 'object' && arg !== null) {
+        try {
+          return JSON.stringify(arg, null, 2) // pretty print
+        } catch (e) {
+          return '[Unserializable Object]'
+        }
+      }
+      return arg
+    })
+
     if (this.category) {
       if (!msg.startsWith(`[${this.category}]`)) {
         msg = `[${this.category}] ${msg}`
@@ -51,8 +62,8 @@ export class DefaultLogger implements ILogger {
         const logMsg = `%c${timestamp} %c[${this.category}]%c ${match[1]}`
         const timeStyle = 'color: #888; font-size: smaller;'
         const resetStyle = 'color: inherit;'
-        if (filteredArgs.length > 0) {
-          ;(console[method] as any)(logMsg, timeStyle, this.style, resetStyle, ...filteredArgs)
+        if (processedArgs.length > 0) {
+          ;(console[method] as any)(logMsg, timeStyle, this.style, resetStyle, ...processedArgs)
         } else {
           ;(console[method] as any)(logMsg, timeStyle, this.style, resetStyle)
         }
@@ -60,8 +71,8 @@ export class DefaultLogger implements ILogger {
       }
     }
 
-    if (filteredArgs.length > 0) {
-      ;(console[method] as any)(`${timestamp} ${msg}`, ...filteredArgs)
+    if (processedArgs.length > 0) {
+      ;(console[method] as any)(`${timestamp} ${msg}`, ...processedArgs)
     } else {
       ;(console[method] as any)(`${timestamp} ${msg}`)
     }

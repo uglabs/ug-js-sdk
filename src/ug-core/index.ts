@@ -1,4 +1,3 @@
-import { apiInstance } from './network/apiInstance'
 
 export { ConversationManager } from './conversation-manager'
 
@@ -21,5 +20,3 @@ export type {
 export type { INetwork } from './network/types'
 
 export type { IAudioRecorder, IVADManager } from './user-input-manager'
-
-export { apiInstance }
