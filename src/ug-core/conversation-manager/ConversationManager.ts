@@ -132,11 +132,12 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       this.logger.warn('Network is not ready, cannot send text')
       return
     }
-    if (this.state === 'idle') {
+    if (this.state === 'idle' || this.state === 'listening') {
       try {
         await this.setState('sending')
         await this.userInputManager.sendText(text)
       } catch (error) {
+        await this.setState('error')
         this.logger.error('Error sending text message', error)
         this.handleError('network_timeout', error as Error)
       }
@@ -179,7 +180,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     await this.userInputManager.stop()
     this.playbackManager.pause()
     await this.network.disconnect()
-    this.setState('idle')
+    await this.setState('idle')
   }
 
   private async setState(newState: ConversationState): Promise<void> {
@@ -285,7 +286,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
 
     this.playbackManager.on(PlaybackManagerEvents.Finished, async () => {
       // only if the last state was set by playback manager such as
-      //playing - so to prever change to userTalking state and others
+      //playing - so to prevent change to userTalking state and other states
       if (this.state === 'playing') {
         this.userInputManager.reset()
         await this.setState('idle')
@@ -327,7 +328,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
 
   private async handleInteractionComplete(): Promise<void> {
     this.logger.debug('Interaction complete received, flushing audio and starting new interaction')
-
+    debugger;
     // Reset AboutToComplete logic immediately to prevent late events
     this.playbackManager.resetAboutToComplete()
 
@@ -342,6 +343,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
   private async startNewInteraction() {
     this.userInputManager.reset()
     this.userInputManager.flushBufferedAudio()
+    await this.setState('idle')
     await this.userInputManager.start()
   }
 

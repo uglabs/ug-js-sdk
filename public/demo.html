@@ -70,7 +70,7 @@
     const serverUrlInput = document.getElementById('serverUrlInput');
     serverUrlInput.value = DEFAULT_UG_SERVER_URL; // Set default value
     const promptInput = document.getElementById('promptInput');
-    promptInput.value = "a game of Scattegories where the user needs to say a country that starts with the letter B";
+    promptInput.value = "a game of Scattergories where the user needs to say a country that starts with the letter C. for example - user can guess Canada";
     const startButton = document.getElementById('startButton');
     const stopButton = document.getElementById('stopButton');
     const textInput = document.getElementById('textInput');
@@ -140,6 +140,7 @@
     sendButton.addEventListener('click', async () => {
       if (!conversationManager) return;
       await handleAction(async () => {
+        document.getElementById('text').textContent = "";
         await conversationManager.sendText(textInput.value);
         textInput.value = '';
       });

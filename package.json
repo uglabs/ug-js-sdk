@@ -13,10 +13,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "bundle": "webpack",
+    "bundle:dev": "webpack --mode=development --devtool=source-map",
     "test": "jest",
     "format": "prettier --write \"**/*.{js,ts,json,css,md}\"",
     "pre-publish": "npm run build && npm run bundle",
-    "serve:demo": "npm run pre-publish && http-server public -o /demo.html"
+    "serve:demo": "npm run bundle:dev && http-server public -o /demo.html"
   },
   "author": "Gal Bracha <gal.bracha@uglabs.io>",
   "license": "MIT",
