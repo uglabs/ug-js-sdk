@@ -28,6 +28,7 @@ export interface InputCapabilities {
 export interface ConversationConfig {
   apiUrl: string
   apiKey: string
+  federatedId: string
   imageFrame?: string
   personaId?: string
   prompt: string

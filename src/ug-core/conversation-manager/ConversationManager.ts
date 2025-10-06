@@ -56,6 +56,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     this.network = new ConversationNetwork(
       config.apiUrl,
       config.apiKey,
+      config.federatedId,
       config.prompt,
       config.contextValues
     )
@@ -328,7 +329,6 @@ export class ConversationManager extends EventEmitter implements IConversationMa
 
   private async handleInteractionComplete(): Promise<void> {
     this.logger.debug('Interaction complete received, flushing audio and starting new interaction')
-    debugger;
     // Reset AboutToComplete logic immediately to prevent late events
     this.playbackManager.resetAboutToComplete()
 

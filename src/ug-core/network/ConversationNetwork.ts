@@ -44,12 +44,13 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   constructor(
     private apiUrl: string,
     private apiKey: string,
+    private federatedId: string,
     private prompt: string,
     private contextValues?: Record<string, string | number | boolean>
   ) {
     const logger = new DefaultLogger({ category: '🗣️ConversationNetwork', style: StyleGrey })
     super(logger)
-    this._api = new API({apiUrl, apiKey})
+    this._api = new API({apiUrl, apiKey, federatedId})
   }
 
   async initialize() {
