@@ -143,4 +143,4 @@ All events are broadcast over an **EventEmitter**
 
 ---
 
-_Last updated: 2025‑0‑30_
+_Last updated: 2025‑10‑30_
