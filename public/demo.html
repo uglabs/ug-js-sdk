@@ -10,10 +10,16 @@
 <body>
   <h1>UG JS SDK Demo</h1>
   <div class="callout">
-    <p>Please login to <a href="https://pug-playground.stg.uglabs.app/profile" target="_blank">https://pug-playground.stg.uglabs.app/profile</a> and click "Copy" to copy your API Key.</p>
+    <p>Please login to <a href="https://pug-playground.stg.uglabs.app/" target="_blank">https://pug-playground.stg.uglabs.app/</a> and:</p>
+    <p>1. Create a <a href="https://pug-playground.stg.uglabs.app/service-accounts" target="_blank">Service account</a> and "Copy" the API Key.</p>
+    <p>2. Create a <a href="https://pug-playground.stg.uglabs.app/players" target="_blank">Player</a> and copy the "Federated Id" (Player's secret)</p>
+    </p>
   </div>
   <label for="apiKey">API Key:</label>
   <input type="text" id="apiKey" placeholder="Enter Service Account API Key" style="width: 300px;">
+  <br>
+  <label for="federatedId">Federated Id:</label>
+  <input type="text" id="federatedId" placeholder="Enter Federated Id" style="width: 300px;">
   <br>
   <label for="serverUrlInput">API URL:</label>
   <input type="text" id="serverUrlInput" placeholder="Override Server URL" style="width: 300px;">
@@ -24,10 +30,10 @@
   <textarea id="promptInput" rows="4"></textarea>
   <br><br>
   <button id="startButton">Start</button>
-  <button id="stopButton">Stop</button>
+  <button id="stopButton" disabled>Stop</button>
   <br><br>
   <input type="text" id="textInput" placeholder="Enter text to send" />
-  <button id="sendButton">Send</button>
+  <button id="sendButton" disabled>Send</button>
   <br><br>
   <div id="errorMessage" class="error-message"></div>
   <div>State: <span id="state">uninitialized</span></div>
@@ -55,6 +61,11 @@
       onStateChange: (state) => {
         console.log('State changed:', state);
         document.getElementById('state').textContent = state;
+        if(state !== "uninitialized") {
+          sendButton.disabled = false;
+          startButton.disabled = true;
+          stopButton.disabled = false;
+        }
       },
       onSubtitleChange: (event) => {
         console.log('Subtitle changed:', event);
@@ -66,7 +77,10 @@
       },
     };
 
+    
+    const state = document.getElementById('state');
     const apiKeyInput = document.getElementById('apiKey');
+    const federatedIdInput = document.getElementById('federatedId');
     const serverUrlInput = document.getElementById('serverUrlInput');
     serverUrlInput.value = DEFAULT_UG_SERVER_URL; // Set default value
     const promptInput = document.getElementById('promptInput');
@@ -74,16 +88,28 @@
     const startButton = document.getElementById('startButton');
     const stopButton = document.getElementById('stopButton');
     const textInput = document.getElementById('textInput');
+    // Allow pressing Enter in the text input to trigger the send button
+    textInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        sendButton.click();
+      }
+    });
     const sendButton = document.getElementById('sendButton');
     const stateDiv = document.getElementById('state');
     const textDiv = document.getElementById('text');
     const errorMessageDiv = document.getElementById('errorMessage');
 
-    // Load API key from local storage
+    // Load keys from local storage
     const savedApiKey = localStorage.getItem('apiKey');
     if (savedApiKey) {
       apiKeyInput.value = savedApiKey;
     }
+    const savedFederatedId = localStorage.getItem('federatedId');
+    if (savedFederatedId) {
+      federatedIdInput.value = savedFederatedId;
+    }
+
 
     let conversationManager;
 
@@ -111,15 +137,19 @@
     startButton.addEventListener('click', async () => {
       document.getElementById('text').textContent = ''; // Clear previous text
 
-      // Save API key to local storage
+      // Save keys to local storage
       if (apiKeyInput.value) {
         localStorage.setItem('apiKey', apiKeyInput.value);
+      }
+      if (federatedIdInput.value) {
+        localStorage.setItem('federatedId', federatedIdInput.value);
       }
       const config = {
         capabilities: playbackCapabilities,
         inputCapabilities: inputCapabilities,
         apiUrl: serverUrlInput.value || DEFAULT_UG_SERVER_URL,
         apiKey: apiKeyInput.value,
+        federatedId: federatedIdInput.value,
         prompt: promptInput.value,
         hooks: hooks,
       };

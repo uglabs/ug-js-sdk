@@ -6,12 +6,14 @@ class Api {
   private _authToken?: string
   private _requestId: string | null = null // Stores the latest X-Request-ID
   apiUrl: string
-  private _apiKey?: string
+  private _apiKey: string
+  private _federatedId: string
   apiClient: AxiosInstance
 
-  constructor({ apiUrl, apiKey }: { apiUrl?: string, apiKey?: string } = {}) {
+  constructor({ apiUrl, apiKey, federatedId }: { apiUrl: string, apiKey: string, federatedId: string }) {
     this.apiUrl = apiUrl
     this._apiKey = apiKey
+    this._federatedId = federatedId
     this._authToken = LocalStorage.getWithExpiry<string>('authToken') || undefined
 
     this.apiClient = axios.create({
@@ -131,10 +133,11 @@ class Api {
     }
   }
 
-  // Exchanges api key with access token
+  // Player Login - Exchanges api key and federated id with access token
   async loginWithApiKey(): Promise<string> {
     const response = await this.apiClient.post('/auth/login', {
       api_key: this._apiKey,
+      federated_id: this._federatedId
     })
     this.authToken = response.data.access_token
     this.apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`
