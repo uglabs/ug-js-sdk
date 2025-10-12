@@ -9,12 +9,7 @@ import {
 } from '../playback-manager/types'
 import { IVADManager } from '../user-input-manager'
 import { VADManager } from '../user-input-manager/VADManager'
-import {
-  ConversationError,
-  ConversationState,
-  InputEnvelope,
-  ConversationConfig,
-} from '../types'
+import { ConversationError, ConversationState, InputEnvelope, ConversationConfig } from '../types'
 import { UserInputManagerEvents } from '../user-input-manager/types'
 import { ConversationNetwork } from '../network/ConversationNetwork'
 import { PlaybackManager } from '../playback-manager/PlaybackManager'

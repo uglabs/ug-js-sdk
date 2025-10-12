@@ -3,7 +3,12 @@ import { EventEmitter } from '../core/EventEmitter'
 import { InputCapabilities } from '../types/index'
 import { ConversationNetwork } from '../network/ConversationNetwork'
 import { AudioRecorder, AudioRecordingConfig, AudioRecorderEvents } from './AudioRecorder'
-import { IVADManager, UserInputManagerEvents, VadManagerEvents, VADVoiceActivityEvent } from './types'
+import {
+  IVADManager,
+  UserInputManagerEvents,
+  VadManagerEvents,
+  VADVoiceActivityEvent,
+} from './types'
 
 /**
  * Manages user input for conversations

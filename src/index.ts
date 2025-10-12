@@ -1,1 +1,1 @@
-export * from './ug-core';
+export * from './ug-core'

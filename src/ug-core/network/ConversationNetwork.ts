@@ -30,7 +30,7 @@ const audioConfig: AudioConfig = {
 
 export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   private wsConnection: WebSocketConnection | null = null
-  private _api: API | null = null;
+  private _api: API | null = null
   private pendingRequests = new Map<
     string,
     {
@@ -50,7 +50,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   ) {
     const logger = new DefaultLogger({ category: '🗣️ConversationNetwork', style: StyleGrey })
     super(logger)
-    this._api = new API({apiUrl, apiKey, federatedId})
+    this._api = new API({ apiUrl, apiKey, federatedId })
   }
 
   async initialize() {
@@ -75,7 +75,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
 
   async connect(): Promise<void> {
     // Cleanly remove the trailing '/api' (with or without slash) and add '/interact'
-    let wsUrl = this.apiUrl.replace(/\/api\/?$/, '') + '/interact';
+    let wsUrl = this.apiUrl.replace(/\/api\/?$/, '') + '/interact'
     this.wsConnection = new WebSocketConnection(wsUrl, this.getWebSocketHandlers())
     this.wsConnection.connect()
     this.logger.debug('Network connections established - Authenticating next...')

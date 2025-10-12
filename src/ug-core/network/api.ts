@@ -10,7 +10,15 @@ class Api {
   private _federatedId: string
   apiClient: AxiosInstance
 
-  constructor({ apiUrl, apiKey, federatedId }: { apiUrl: string, apiKey: string, federatedId: string }) {
+  constructor({
+    apiUrl,
+    apiKey,
+    federatedId,
+  }: {
+    apiUrl: string
+    apiKey: string
+    federatedId: string
+  }) {
     this.apiUrl = apiUrl
     this._apiKey = apiKey
     this._federatedId = federatedId
@@ -137,7 +145,7 @@ class Api {
   async loginWithApiKey(): Promise<string> {
     const response = await this.apiClient.post('/auth/login', {
       api_key: this._apiKey,
-      federated_id: this._federatedId
+      federated_id: this._federatedId,
     })
     this.authToken = response.data.access_token
     this.apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`

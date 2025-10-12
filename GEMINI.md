@@ -41,34 +41,34 @@
 Below is the distilled turn‑by‑turn flow:
 
 1. On first interaction we send a auth message such as
-{
-    "type": "request",
-    "uid":"566c0ad4-fb5b-488c-b935-73e111092711",
-    "kind": "authenticate",
-    "access_token": "{{accessToken}}"
-}
+   {
+   "type": "request",
+   "uid":"566c0ad4-fb5b-488c-b935-73e111092711",
+   "kind": "authenticate",
+   "access_token": "{{accessToken}}"
+   }
 
 1.B. we shall get a similar response with the same uid
 
 2. We then send a set_configuration request
-{
-    "type": "request",
-    "kind": "set_configuration",
-    "uid":"123c0ad4-fb5b-488c-b935-73e111092753",
-    "config": {
-        "prompt": "What is the meaning of life. explain in up to 2 paragraphs"
-    }
-}
-
+   {
+   "type": "request",
+   "kind": "set_configuration",
+   "uid":"123c0ad4-fb5b-488c-b935-73e111092753",
+   "config": {
+   "prompt": "What is the meaning of life. explain in up to 2 paragraphs"
+   }
+   }
 
 3. We send an text message with a simple "." to get a response from the server based on the above prompt
-```json 
+
+```json
 {
-    "type": "stream",
-    "uid":"116c0ad4-fb5b-488c-b935-73e111092798",
-    "kind": "interact",
-    "text": ".",
-    "audio_output": true
+  "type": "stream",
+  "uid": "116c0ad4-fb5b-488c-b935-73e111092798",
+  "kind": "interact",
+  "text": ".",
+  "audio_output": true
 }
 ```
 
@@ -88,9 +88,11 @@ Below is the distilled turn‑by‑turn flow:
    - `Speech started` → `idle -> userSpeaking`.
    - `AudioRecorder` starts; mic chunks (\~1.9 kB) emitted every \~100 ms.
 
-9.  **Streaming to backend**
-   - `UserInputManager.sendAudio` packages chunk → `ConversationNetwork.send (type: audio)`.
-for example: 
+9. **Streaming to backend**
+
+- `UserInputManager.sendAudio` packages chunk → `ConversationNetwork.send (type: audio)`.
+  for example:
+
 ```json{
     "type": "request",
     "uid":"321c0ad4-fb5b-488c-b935-73e111092321",
@@ -99,10 +101,13 @@ for example:
     "audio": "Uk=="
 }
 ```
+
 1.  **Speech end → send completion**
-   - `Speech ended` → `userSpeaking -> listening`.
-   - `ConversationNetwork.send (type: input_complete)`.
-Will send a packet of interact
+
+- `Speech ended` → `userSpeaking -> listening`.
+- `ConversationNetwork.send (type: input_complete)`.
+  Will send a packet of interact
+
 ```json
 {
     "type": "stream",
@@ -144,3 +149,4 @@ All events are broadcast over an **EventEmitter**
 ---
 
 _Last updated: 2025‑10‑30_
+```

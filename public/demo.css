@@ -27,7 +27,7 @@ h1 {
 .callout a:hover {
   text-decoration: underline;
 }
-input[type="text"] {
+input[type='text'] {
   width: 300px;
   padding: 8px;
   margin-bottom: 10px;

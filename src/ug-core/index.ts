@@ -1,4 +1,3 @@
-
 export { ConversationManager } from './conversation-manager'
 
 export type {
@@ -6,8 +5,12 @@ export type {
   ConversationState,
   ConversationError,
   PlaybackCapabilities,
+  InputCapabilities,
   InputEnvelope,
+  AudioInputEnvelope,
+  Message,
   ILogger,
+  StringMessage,
 } from './types'
 
 export type {
