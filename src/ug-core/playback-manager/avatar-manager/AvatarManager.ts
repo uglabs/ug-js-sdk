@@ -1,6 +1,6 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { AvatarManagerEvents, IAvatar } from '../types'
-import { DefaultLogger, StyleOrange } from '@/ug-core/core/Logger'
+import { EventEmitter } from '../../core/EventEmitter'
+import { DefaultLogger, StyleOrange } from '../../core/Logger'
+import { IAvatar, AvatarManagerEvents } from '../types'
 
 /**
  * Can help drive an animated character by signaling what animation should be triggered

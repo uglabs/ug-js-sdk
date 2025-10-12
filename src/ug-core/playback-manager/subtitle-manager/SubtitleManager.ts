@@ -1,6 +1,6 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
+import { EventEmitter } from '../../core/EventEmitter'
+import { DefaultLogger, StylePink } from '../../core/Logger'
 import { SubtitleMessage, WordBoundary, WordHighlightEvent, SubtitleChangeEvent } from '../types'
-import { DefaultLogger, StylePink } from '@/ug-core/core/Logger'
 
 export const SubtitleManagerEvents = {
   WordChange: 'wordChange',

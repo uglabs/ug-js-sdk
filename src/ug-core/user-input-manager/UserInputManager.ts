@@ -1,10 +1,9 @@
-import { DefaultLogger, StyleBlue } from '@/ug-core/core/Logger'
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { InputCapabilities } from '@/ug-core/types/index'
-import { IVADManager, UserInputManagerEvents, VADVoiceActivityEvent } from './types'
-import { AudioRecorder, AudioRecorderEvents, AudioRecordingConfig } from './AudioRecorder'
-import { VadManagerEvents } from './VADManager'
-import { ConversationNetwork } from '@/ug-core/network/ConversationNetwork'
+import { DefaultLogger, StyleBlue } from '../core/Logger'
+import { EventEmitter } from '../core/EventEmitter'
+import { InputCapabilities } from '../types/index'
+import { ConversationNetwork } from '../network/ConversationNetwork'
+import { AudioRecorder, AudioRecordingConfig, AudioRecorderEvents } from './AudioRecorder'
+import { IVADManager, UserInputManagerEvents, VadManagerEvents, VADVoiceActivityEvent } from './types'
 
 /**
  * Manages user input for conversations

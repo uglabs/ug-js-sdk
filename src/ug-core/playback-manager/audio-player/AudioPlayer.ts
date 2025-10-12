@@ -1,5 +1,5 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { DefaultLogger, StyleGreen } from '@/ug-core/core/Logger'
+import { EventEmitter } from '../../core/EventEmitter'
+import { DefaultLogger, StyleGreen } from '../../core/Logger'
 import { AudioPlayerEvents, IAudioPlayer } from '../types'
 import { MP3FrameExtractor } from './MP3FrameExtractor'
 import { AudioPlayerTiming } from './AudioPlayerTiming'

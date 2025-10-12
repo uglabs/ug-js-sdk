@@ -1,5 +1,5 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { DefaultLogger, StylePurple } from '@/ug-core/core/Logger'
+import { EventEmitter } from '../core/EventEmitter'
+import { DefaultLogger, StylePurple } from '../core/Logger'
 import { IVADManager } from './types'
 import type { SpeechProbabilities } from '@ricky0123/vad-web/dist/models'
 import type { VADVoiceActivityEvent } from './types'
