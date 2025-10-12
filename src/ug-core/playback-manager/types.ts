@@ -1,4 +1,4 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
+import { EventEmitter } from '../core/EventEmitter'
 import { Message } from '../types'
 
 export class AudioPlayerEvents {

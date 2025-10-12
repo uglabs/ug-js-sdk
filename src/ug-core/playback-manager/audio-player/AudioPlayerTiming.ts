@@ -1,5 +1,5 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { DefaultLogger, StyleTeal } from '@/ug-core/core/Logger'
+import { EventEmitter } from '../../core/EventEmitter'
+import { DefaultLogger, StyleTeal } from '../../core/Logger'
 
 export class AudioPlayerTimingEvents {
   static AboutToComplete = 'about-to-complete' as const

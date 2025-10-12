@@ -1,5 +1,5 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { DefaultLogger, StyleBrown } from '@/ug-core/core/Logger'
+import { EventEmitter } from '../core/EventEmitter'
+import { DefaultLogger, StyleBrown } from '../core/Logger'
 import { IAudioRecorder } from './types'
 import { MediaRecorderFallback } from './MediaRecorderFallback'
 

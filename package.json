@@ -1,6 +1,6 @@
 {
   "name": "ug-js-sdk",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": true,
   "description": "",
   "main": "dist/index.js",
@@ -10,6 +10,18 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/ug-core/types/index.js",
+      "require": "./dist/ug-core/types/index.js",
+      "types": "./dist/ug-core/types/index.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "bundle": "webpack",
@@ -41,6 +53,7 @@
     "http-server": "^14.1.1",
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
+    
     "ts-jest": "^29.4.4",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.2",

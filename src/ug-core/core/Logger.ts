@@ -1,4 +1,4 @@
-import { ILogger } from '@/ug-core/types'
+import { ILogger } from '../types'
 
 // Predefined style constants for logger categories
 export const StyleRed = 'color: #f44336; font-weight: bold; font-size: larger'

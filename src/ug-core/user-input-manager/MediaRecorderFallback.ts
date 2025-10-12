@@ -1,5 +1,5 @@
-import { DefaultLogger, StyleBrown } from '@/ug-core/core/Logger'
-import { ILogger } from '@/ug-core/types/index'
+import { DefaultLogger, StyleBrown } from '../core/Logger'
+import { ILogger } from '../types/index'
 
 /**
  * It uses the MediaRecorder API to record audio from a MediaStream and emits audio data as ArrayBuffer.

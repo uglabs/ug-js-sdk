@@ -1,7 +1,7 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { AudioEvent, InteractResponse, PlaybackCapabilities } from '@/ug-core/types'
-import { DefaultLogger, StyleOrange } from '@/ug-core/core/Logger'
-import { ConversationManagerEvents } from '@/ug-core/conversation-manager/ConversationManager'
+import { EventEmitter } from '../core/EventEmitter'
+import { AudioEvent, InteractResponse, PlaybackCapabilities } from '../types'
+import { DefaultLogger, StyleOrange } from '../core/Logger'
+import { ConversationManagerEvents } from '../conversation-manager/ConversationManager'
 
 import { AudioPlayer } from './audio-player/AudioPlayer'
 import { SubtitleManager, SubtitleManagerEvents } from './subtitle-manager/SubtitleManager'

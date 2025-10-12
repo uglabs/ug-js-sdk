@@ -1,24 +1,24 @@
-import { DefaultLogger, StylePurple } from '@/ug-core/core/Logger'
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { ConversationNetworkEvents, INetwork } from '@/ug-core/network/types'
-import { PlaybackManagerEvents } from '@/ug-core/playback-manager/PlaybackManager'
+import { DefaultLogger, StylePurple } from '../core/Logger'
+import { EventEmitter } from '../core/EventEmitter'
+import { ConversationNetworkEvents, INetwork } from '../network/types'
+import { PlaybackManagerEvents } from '../playback-manager/PlaybackManager'
 import {
   ImageChangeEvent,
   SubtitleChangeEvent,
   WordHighlightEvent,
-} from '@/ug-core/playback-manager/types'
-import { IVADManager } from '@/ug-core/user-input-manager'
-import { VADManager } from '@/ug-core/user-input-manager/VADManager'
+} from '../playback-manager/types'
+import { IVADManager } from '../user-input-manager'
+import { VADManager } from '../user-input-manager/VADManager'
 import {
   ConversationError,
   ConversationState,
   InputEnvelope,
   ConversationConfig,
-} from '@/ug-core/types'
-import { UserInputManagerEvents } from '@/ug-core/user-input-manager/types'
-import { ConversationNetwork } from '@/ug-core/network/ConversationNetwork'
+} from '../types'
+import { UserInputManagerEvents } from '../user-input-manager/types'
+import { ConversationNetwork } from '../network/ConversationNetwork'
 import { PlaybackManager } from '../playback-manager/PlaybackManager'
-import { UserInputManager } from '@/ug-core/user-input-manager/UserInputManager'
+import { UserInputManager } from '../user-input-manager/UserInputManager'
 import { IConversationManager } from './types'
 
 export const ConversationManagerEvents = {

@@ -1,5 +1,5 @@
-import { EventEmitter } from '@/ug-core/core/EventEmitter'
-import { DefaultLogger, StyleRed } from '@/ug-core/core/Logger'
+import { EventEmitter } from '../../core/EventEmitter'
+import { DefaultLogger, StyleRed } from '../../core/Logger'
 import { VisemeMessage, VisemeSchedulerEvents } from '../types'
 
 export class VisemeScheduler extends EventEmitter {

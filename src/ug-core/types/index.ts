@@ -2,8 +2,8 @@ import {
   ImageChangeEvent,
   SubtitleChangeEvent,
   WordHighlightEvent,
-} from '@/ug-core/playback-manager/types'
-import { AudioRecordingConfig } from '@/ug-core/user-input-manager'
+} from '../playback-manager/types'
+import { AudioRecordingConfig } from '../user-input-manager'
 
 export interface ILogger {
   trace(message: string, ...args: any[]): void
