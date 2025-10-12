@@ -16,7 +16,7 @@
     "bundle:dev": "webpack --mode=development --devtool=source-map",
     "test": "jest --passWithNoTests",
     "format": "prettier --write \"**/*.{js,ts,json,css,md}\"",
-    "pre-publish": "npm run build && npm run bundle",
+    "prepare": "npm run build && npm run bundle",
     "serve:demo": "npm run bundle:dev && http-server public -o /demo.html"
   },
   "author": "Gal Bracha <gal.bracha@uglabs.io>",
