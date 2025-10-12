@@ -1,6 +1,6 @@
 {
-  "name": "js-sdk",
-  "version": "3.0.0",
+  "name": "ug-js-sdk",
+  "version": "3.0.1",
   "private": true,
   "description": "",
   "main": "dist/index.js",
