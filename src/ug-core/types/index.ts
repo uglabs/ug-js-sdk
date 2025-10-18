@@ -14,15 +14,15 @@ export interface ILogger {
 }
 
 export interface PlaybackCapabilities {
-  audio: boolean
-  viseme: boolean
-  subtitles: boolean
-  avatar: boolean
+  audio?: boolean
+  viseme?: boolean
+  subtitles?: boolean
+  avatar?: boolean
 }
 
 export interface InputCapabilities {
-  audio: boolean
-  text: boolean
+  audio?: boolean
+  text?: boolean
 }
 
 export interface ConversationConfig {
