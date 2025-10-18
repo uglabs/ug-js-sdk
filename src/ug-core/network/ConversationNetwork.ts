@@ -13,6 +13,7 @@ import {
   Base64,
   CheckTurnRequest,
   CheckTurnResponse,
+  ConversationConfig,
   ErrorResponse,
   InteractRequest,
   Request,
@@ -42,15 +43,11 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   >()
 
   constructor(
-    private apiUrl: string,
-    private apiKey: string,
-    private federatedId: string,
-    private prompt: string,
-    private contextValues?: Record<string, string | number | boolean>
+    private config: ConversationConfig,
   ) {
     const logger = new DefaultLogger({ category: '🗣️ConversationNetwork', style: StyleGrey })
     super(logger)
-    this._api = new API({ apiUrl, apiKey, federatedId })
+    this._api = new API({ apiUrl: config.apiUrl, apiKey: config.apiKey, federatedId: config.federatedId })
   }
 
   async initialize() {
@@ -75,7 +72,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
 
   async connect(): Promise<void> {
     // Cleanly remove the trailing '/api' (with or without slash) and add '/interact'
-    let wsUrl = this.apiUrl.replace(/\/api\/?$/, '') + '/interact'
+    let wsUrl = this.config.apiUrl.replace(/\/api\/?$/, '') + '/interact'
     this.wsConnection = new WebSocketConnection(wsUrl, this.getWebSocketHandlers())
     this.wsConnection.connect()
     this.logger.debug('Network connections established - Authenticating next...')
@@ -182,7 +179,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     const request: SetConfigurationRequest = {
       type: 'request',
       kind: 'set_configuration',
-      config: { prompt: this.prompt },
+      config: { prompt: this.config.prompt },
       uid: '', // will be set by makeRequest
     }
     await this.makeRequest<SetConfigurationResponse>(request)
@@ -216,8 +213,8 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
       type: 'stream',
       kind: 'interact',
       text,
-      context: { ...this.contextValues, ...context },
-      audio_output: true,
+      context: { ...this.config.contextValues, ...context },
+      audio_output: this.config.capabilities?.audio ?? true,
       uid: '', // will be set by makeStreamRequest
     }
     await this.makeStreamRequest<Response>(request)
@@ -240,7 +237,4 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     }
   }
 
-  updateContextValues(newValues: Record<string, string | number | boolean>) {
-    this.contextValues = { ...this.contextValues, ...newValues }
-  }
 }

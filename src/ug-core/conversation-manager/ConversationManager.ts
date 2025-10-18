@@ -49,11 +49,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
     // Dependency injection
     this.network = new ConversationNetwork(
-      config.apiUrl,
-      config.apiKey,
-      config.federatedId,
-      config.prompt,
-      config.contextValues
+      config
     )
     this.vadManager = new VADManager()
     this.userInputManager = new UserInputManager(
@@ -364,7 +360,4 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
   }
 
-  public updateContextValues(newValues: Record<string, string | number | boolean>) {
-    this.network.updateContextValues(newValues)
-  }
 }

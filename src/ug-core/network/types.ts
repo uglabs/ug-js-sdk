@@ -22,7 +22,6 @@ export interface INetwork {
   disconnect(): Promise<void>
   send(data: any): Promise<void>
   isReady(): boolean
-  updateContextValues(newValues: Record<string, string | number | boolean>): void
   on(event: ConversationNetworkEventType, callback: Function): void
   off(event: ConversationNetworkEventType, callback: Function): void
 }

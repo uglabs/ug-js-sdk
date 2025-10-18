@@ -9,6 +9,5 @@ export interface IConversationManager {
   forceInputComplete(): Promise<void>
   stop(): Promise<void>
   toggleTextOnlyInput(isTextOnly: boolean): Promise<void>
-  updateContextValues(newValues: Record<string, string | number | boolean>): void
   on(event: string, listener: (...args: any[]) => void): void
 }
