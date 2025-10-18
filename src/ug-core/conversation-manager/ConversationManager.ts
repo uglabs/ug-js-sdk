@@ -185,7 +185,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
     const oldState = this.state
     this.state = newState
-    this.config.hooks.onStateChange(newState)
+    this.config.hooks.onStateChange?.(newState)
     await this.emit(ConversationManagerEvents.StateChange, { oldState, newState })
     this.logger.debug(`State transition: ${oldState} -> ${newState}`)
   }
@@ -318,7 +318,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
 
     await this.setState('error')
-    this.config.hooks.onError(conversationError)
+    this.config.hooks.onError?.(conversationError)
     this.logger.error(`Conversation error: ${type}`, error)
   }
 

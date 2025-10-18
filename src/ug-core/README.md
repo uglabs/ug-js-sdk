@@ -142,10 +142,6 @@ const convConfig: ConversationConfig = {
     onSubtitleChange: (event: SubtitleChangeEvent) => {
       setSubtitles(event)
     },
-    onImageChange(event: ImageChangeEvent) {
-      const imageData = `data:${event.format};base64,${event.image}`
-      setCurrentImage(imageData)
-    },
     onError: (error: ConversationError) => {
       toast.error(error.message)
     },
