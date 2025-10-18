@@ -36,12 +36,12 @@ export interface ConversationConfig {
   hooks: {
     onTextMessage?: (event: TextEvent) => void
     onStringMessage?(message: StringMessage): unknown
-    onStateChange: (state: ConversationState) => void
-    onSubtitleHighlight: (event: WordHighlightEvent) => void
+    onStateChange?: (state: ConversationState) => void
+    onSubtitleHighlight?: (event: WordHighlightEvent) => void
     onSubtitleChange?: (subtitle: SubtitleChangeEvent) => void
     onImageChange?: (event: ImageChangeEvent) => void
     onNetworkStatusChange?: (isReady: boolean) => void
-    onError: (error: ConversationError) => void
+    onError?: (error: ConversationError) => void
     onAvatarAnimationChanged?: (payload: { name: string; layer: number; loop: boolean }) => void
   }
   capabilities?: PlaybackCapabilities
