@@ -57,7 +57,6 @@ export type ConversationState =
   | 'paused'
   | 'listening'
   | 'userSpeaking'
-  | 'sending'
   | 'waiting'
   | 'playing'
   | 'completed'

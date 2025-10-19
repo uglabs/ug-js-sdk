@@ -101,6 +101,10 @@ export class UserInputManager extends EventEmitter {
       this.setupRecorderListeners()
       await this.reinitializeAudio()
     } else if (!this.capabilities.audio && this.audioRecorder) {
+      // TODO perhaps we should also remove listener to vad
+      // this.vadManager.off(VadManagerEvents.VoiceActivity)
+      // this.vadManager.off(VadManagerEvents.Silence)
+      this.vadManager.stopAnalysis()
       await this.audioRecorder.stop()
       this.audioRecorder = null
       if (this.mediaStream) {
