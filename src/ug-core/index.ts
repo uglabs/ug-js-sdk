@@ -11,6 +11,7 @@ export type {
   Message,
   ILogger,
   StringMessage,
+  TextEvent,
 } from './types'
 
 export type {

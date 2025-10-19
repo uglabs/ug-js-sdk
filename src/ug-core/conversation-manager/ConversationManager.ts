@@ -126,7 +126,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
     if (this.state === 'idle' || this.state === 'listening') {
       try {
-        await this.setState('sending')
+        await this.setState('waiting')
         await this.userInputManager.sendText(text)
       } catch (error) {
         await this.setState('error')
@@ -319,23 +319,18 @@ export class ConversationManager extends EventEmitter implements IConversationMa
   }
 
   private async handleInteractionComplete(): Promise<void> {
-    this.logger.debug('Interaction complete received, flushing audio and starting new interaction')
+    this.logger.debug('Interaction complete received, not starting new interaction')
     // Reset AboutToComplete logic immediately to prevent late events
     this.playbackManager.resetAboutToComplete()
 
     try {
-      await this.startNewInteraction()
+      this.userInputManager.reset()
+      this.userInputManager.flushBufferedAudio()
+      await this.setState('idle')
     } catch (error) {
       this.logger.error('Failed to handle interaction complete', error)
       this.handleError('network_timeout', error as Error)
     }
-  }
-
-  private async startNewInteraction() {
-    this.userInputManager.reset()
-    this.userInputManager.flushBufferedAudio()
-    await this.setState('idle')
-    await this.userInputManager.start()
   }
 
   public async toggleTextOnlyInput(isTextOnly: boolean): Promise<void> {
