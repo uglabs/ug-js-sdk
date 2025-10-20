@@ -75,7 +75,42 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     let wsUrl = this.config.apiUrl.replace(/\/api\/?$/, '') + '/interact'
     this.wsConnection = new WebSocketConnection(wsUrl, this.getWebSocketHandlers())
     this.wsConnection.connect()
+    
+    // Wait for WebSocket to be ready with 10 second timeout
+    await this.waitForWebSocketReady(10000)
+    
     this.logger.debug('Network connections established - Authenticating next...')
+  }
+
+  private async waitForWebSocketReady(timeoutMs: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.wsConnection) {
+        reject(new Error('WebSocket connection not initialized'))
+        return
+      }
+
+      // Check if already ready
+      if (this.wsConnection.isReady()) {
+        resolve()
+        return
+      }
+
+      const timeout = setTimeout(() => {
+        reject(new Error(`WebSocket connection timeout after ${timeoutMs}ms`))
+      }, timeoutMs)
+
+      // Poll for readiness
+      const checkReady = () => {
+        if (this.wsConnection?.isReady()) {
+          clearTimeout(timeout)
+          resolve()
+        } else {
+          setTimeout(checkReady, 50) // Check every 50ms
+        }
+      }
+
+      checkReady()
+    })
   }
 
   private getWebSocketHandlers(): NetworkEventHandlers {
