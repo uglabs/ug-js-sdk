@@ -121,15 +121,15 @@ export class ConversationManager extends EventEmitter implements IConversationMa
 
   async sendText(text: string): Promise<void> {
     if (!this.network.isReady()) {
-      this.logger.warn('Network is not ready, cannot send text')
-      return
+      const errorMessage = 'Network is not ready, cannot send text. probably disconnected'
+      this.logger.error(errorMessage)
+      this.handleError('network_timeout', new Error(errorMessage))
     }
     if (this.state === 'idle' || this.state === 'listening') {
       try {
         await this.setState('waiting')
         await this.userInputManager.sendText(text)
       } catch (error) {
-        await this.setState('error')
         this.logger.error('Error sending text message', error)
         this.handleError('network_timeout', error as Error)
       }

@@ -7,7 +7,7 @@ class Api {
   private _requestId: string | null = null // Stores the latest X-Request-ID
   apiUrl: string
   private _apiKey: string
-  private _federatedId: string
+  private _federatedId: string | null = null
   apiClient: AxiosInstance
 
   constructor({
@@ -17,11 +17,11 @@ class Api {
   }: {
     apiUrl: string
     apiKey: string
-    federatedId: string
+    federatedId?: string
   }) {
     this.apiUrl = apiUrl
     this._apiKey = apiKey
-    this._federatedId = federatedId
+    this._federatedId = federatedId //if federated id is not supplied - we assume the user is a developer and not a player
     this._authToken = LocalStorage.getWithExpiry<string>('authToken') || undefined
 
     this.apiClient = axios.create({
