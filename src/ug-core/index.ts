@@ -12,6 +12,7 @@ export type {
   ILogger,
   StringMessage,
   TextEvent,
+  VoiceProfile,
 } from './types'
 
 export type {
