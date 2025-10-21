@@ -132,6 +132,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
                 this.pendingRequests.delete(message.uid)
               } else if (message.kind === 'error') {
                 this.logger.error(message.error)
+                this.emit(ConversationNetworkEvents.Error, new Error(message.error))
               } else {
                 this.emit(ConversationNetworkEvents.Message, message)
               }
@@ -214,7 +215,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     const request: SetConfigurationRequest = {
       type: 'request',
       kind: 'set_configuration',
-      config: { prompt: this.config.prompt },
+      config: { prompt: this.config.prompt, voice_profile: this.config.voiceProfile },
       uid: '', // will be set by makeRequest
     }
     await this.makeRequest<SetConfigurationResponse>(request)
@@ -244,11 +245,12 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     text: string | undefined = undefined,
     context: Record<string, any> = {}
   ): Promise<void> {
+    debugger;
     const request: InteractRequest = {
       type: 'stream',
       kind: 'interact',
       text,
-      context: { ...this.config.contextValues, ...context },
+      context: { ...this.config.context, ...context },
       audio_output: this.config.capabilities?.audio ?? true,
       uid: '', // will be set by makeStreamRequest
     }

@@ -25,6 +25,20 @@ export interface InputCapabilities {
   text?: boolean
 }
 
+/**
+ * ElevenLabs-specific voice profile parameters.
+ */
+export interface VoiceProfile {
+  /** The voice ID to use for synthesis, or undefined for default */
+  voice_id?: string
+  /** Speaking speed, range: 0.7 - 1.2 (undefined for default) */
+  speed?: number
+  /** Stability, range: 0.0 - 1.0 (undefined for default) */
+  stability?: number
+  /** Similarity boost, range: 0.0 - 1.0 (undefined for default) */
+  similarity_boost?: number
+}
+
 export interface ConversationConfig {
   apiUrl: string
   apiKey: string
@@ -32,7 +46,8 @@ export interface ConversationConfig {
   imageFrame?: string
   personaId?: string
   prompt: string
-  contextValues?: Record<string, string | number | boolean>
+  context?: Record<string, string | number | boolean>
+  voiceProfile?: VoiceProfile
   hooks: {
     onTextMessage?: (event: TextEvent) => void
     onStringMessage?(message: StringMessage): unknown
@@ -242,6 +257,7 @@ export interface Configuration {
   prompt?: string | Reference
   temperature?: number
   utilities?: Record<string, any | Reference | null>
+  voice_profile?: VoiceProfile
 }
 
 export interface Reference {
