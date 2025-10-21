@@ -48,9 +48,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       },
     }
     // Dependency injection
-    this.network = new ConversationNetwork(
-      config
-    )
+    this.network = new ConversationNetwork(config)
     this.vadManager = new VADManager()
     this.userInputManager = new UserInputManager(
       this.config.inputCapabilities!,
@@ -354,5 +352,4 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       }
     }
   }
-
 }
