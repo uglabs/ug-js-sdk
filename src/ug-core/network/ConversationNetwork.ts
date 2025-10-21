@@ -42,12 +42,14 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     }
   >()
 
-  constructor(
-    private config: ConversationConfig,
-  ) {
+  constructor(private config: ConversationConfig) {
     const logger = new DefaultLogger({ category: '🗣️ConversationNetwork', style: StyleGrey })
     super(logger)
-    this._api = new API({ apiUrl: config.apiUrl, apiKey: config.apiKey, federatedId: config.federatedId })
+    this._api = new API({
+      apiUrl: config.apiUrl,
+      apiKey: config.apiKey,
+      federatedId: config.federatedId,
+    })
   }
 
   async initialize() {
@@ -75,10 +77,10 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     let wsUrl = this.config.apiUrl.replace(/\/api\/?$/, '') + '/interact'
     this.wsConnection = new WebSocketConnection(wsUrl, this.getWebSocketHandlers())
     this.wsConnection.connect()
-    
+
     // Wait for WebSocket to be ready with 10 second timeout
     await this.waitForWebSocketReady(10000)
-    
+
     this.logger.debug('Network connections established - Authenticating next...')
   }
 
@@ -245,7 +247,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     text: string | undefined = undefined,
     context: Record<string, any> = {}
   ): Promise<void> {
-    debugger;
+    debugger
     const request: InteractRequest = {
       type: 'stream',
       kind: 'interact',
@@ -273,5 +275,4 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
       this.logger.warn('ConversationNetwork.send is deprecated. Use specific methods instead.')
     }
   }
-
 }
