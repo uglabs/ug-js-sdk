@@ -92,7 +92,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       await this.userInputManager.initialize(this.mediaStream ?? undefined)
       await this.network.connect()
       this.logger.debug('Initialized successfully')
-      this.setState('idle')
+      this.setState('waiting')
     } catch (error) {
       this.handleError('server_error', error as Error)
     }
