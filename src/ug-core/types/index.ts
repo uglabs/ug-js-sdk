@@ -47,6 +47,7 @@ export interface ConversationConfig {
   personaId?: string
   prompt: string
   context?: Record<string, string | number | boolean>
+  utilities?: Record<string, AnyUtility | Reference | null>
   voiceProfile?: VoiceProfile
   hooks: {
     onTextMessage?: (event: TextEvent) => void
@@ -256,7 +257,7 @@ export interface DetectSpeakersResponse extends Response {
 export interface Configuration {
   prompt?: string | Reference
   temperature?: number
-  utilities?: Record<string, any | Reference | null>
+  utilities?: Record<string, AnyUtility | Reference | null>
   voice_profile?: VoiceProfile
 }
 
@@ -311,7 +312,7 @@ export interface InteractRequest extends Request {
    * A list of utility names that should be called when user input is available.
    * Unlike the `on_input` utilities, these are *non-blocking* and their outputs
    * will not be available in the context for the prompt.
-   */ 
+   */
   on_input_non_blocking?: string[]
   /*
    * A list of utility names that should be called when user input is available.
@@ -392,17 +393,21 @@ export interface RunResponse extends Response {
   kind: 'run'
 }
 
-
 export interface Utility {
   type: string
 }
 
+export type AnyUtility = Classify | Extract
 
 export interface Classify extends Utility {
-    type: "classify"
-    // The questions is a template like the interaction prompt, and has access to
-    // the context relevant to the stage when it's evaluated.
-    classification_question: string
-    additional_context?: string
-    answers: string[]
+  type: 'classify'
+  // The questions is a template like the interaction prompt, and has access to
+  // the context relevant to the stage when it's evaluated.
+  classification_question: string
+  additional_context?: string
+  answers: string[]
+}
+
+export interface Extract extends Utility {
+  type: 'extract'
 }
