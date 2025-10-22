@@ -247,7 +247,6 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     text: string | undefined = undefined,
     context: Record<string, any> = {}
   ): Promise<void> {
-    debugger
     const request: InteractRequest = {
       type: 'stream',
       kind: 'interact',
