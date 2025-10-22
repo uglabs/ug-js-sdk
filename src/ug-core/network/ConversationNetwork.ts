@@ -217,7 +217,11 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     const request: SetConfigurationRequest = {
       type: 'request',
       kind: 'set_configuration',
-      config: { prompt: this.config.prompt, voice_profile: this.config.voiceProfile },
+      config: {
+        prompt: this.config.prompt,
+        voice_profile: this.config.voiceProfile,
+        utilities: this.config.utilities,
+      },
       uid: '', // will be set by makeRequest
     }
     await this.makeRequest<SetConfigurationResponse>(request)
