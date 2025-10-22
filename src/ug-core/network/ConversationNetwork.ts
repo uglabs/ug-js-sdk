@@ -121,7 +121,8 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
         await this.authenticate()
         await this.setConfiguration()
         this.emit(ConversationNetworkEvents.Connected)
-        await this.interact('.')
+        // Initiate a simple . to the engine to get back a response
+        await this.interact({text: '.', uid:'', kind: 'interact', type: 'stream'})
       },
       onMessage: async (message: any) => {
         if (message.uid && this.pendingRequests.has(message.uid)) {
@@ -247,19 +248,26 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     await this.makeRequest<CheckTurnResponse>(request)
   }
 
-  async interact(
-    text: string | undefined = undefined,
-    context: Record<string, any> = {}
-  ): Promise<void> {
+  async interact(request: InteractRequest): Promise<void> {
+    request.context = { ...this.config.context, ...request.context };
+    request.audio_output = this.config.capabilities?.audio ?? true;
+    request.kind = request.kind ?? 'interact'
+    request.type = request.type ?? 'stream'
+    await this.makeStreamRequest<Response>(request);
+  }
+
+  /**
+   * Process the audio that was sent till now
+   */
+  async interactAudio(): Promise<void> {
     const request: InteractRequest = {
       type: 'stream',
       kind: 'interact',
-      text,
-      context: { ...this.config.context, ...context },
+      context: { ...this.config.context },
       audio_output: this.config.capabilities?.audio ?? true,
       uid: '', // will be set by makeStreamRequest
-    }
-    await this.makeStreamRequest<Response>(request)
+    };
+    await this.makeStreamRequest<Response>(request);
   }
 
   async disconnect(): Promise<void> {

@@ -50,8 +50,9 @@ export interface ConversationConfig {
   utilities?: Record<string, AnyUtility | Reference | null>
   voiceProfile?: VoiceProfile
   hooks: {
+    onDataMessage?: (message: DataEvent) => void
     onTextMessage?: (event: TextEvent) => void
-    onStringMessage?(message: StringMessage): unknown
+    onStringMessage?(message: StringMessage): void
     onStateChange?: (state: ConversationState) => void
     onSubtitleHighlight?: (event: WordHighlightEvent) => void
     onSubtitleChange?: (subtitle: SubtitleChangeEvent) => void
