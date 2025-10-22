@@ -47,6 +47,13 @@ export class ConversationManager extends EventEmitter implements IConversationMa
         text: true,
       },
     }
+    // Clone and mask sensitive fields before logging
+    const loggedConfig = { 
+      ...config, 
+      ...(config.apiKey && { apiKey: config.apiKey.slice(0, 4) + '...' }),
+      ...(config.federatedId && { federatedId: config.federatedId.slice(0, 4) + '...' })
+    }
+    logger.info("Initializing with config", loggedConfig)
     // Dependency injection
     this.network = new ConversationNetwork(config)
     this.vadManager = new VADManager()
