@@ -1,8 +1,10 @@
+import { InteractRequest } from "../types"
+
 export interface IConversationManager {
   initialize(): Promise<void>
   startListening(): Promise<void>
   stopListening(): Promise<void>
-  sendText(text: string): Promise<void>
+  interact(request: InteractRequest): Promise<void> // Main place to converse
   interrupt(): Promise<void>
   pause(): Promise<void>
   resume(): Promise<void>

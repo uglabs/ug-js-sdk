@@ -1,6 +1,6 @@
 import { DefaultLogger, StyleBlue } from '../core/Logger'
 import { EventEmitter } from '../core/EventEmitter'
-import { InputCapabilities } from '../types/index'
+import { InputCapabilities, InteractRequest } from '../types/index'
 import { ConversationNetwork } from '../network/ConversationNetwork'
 import { AudioRecorder, AudioRecordingConfig, AudioRecorderEvents } from './AudioRecorder'
 import {
@@ -189,12 +189,8 @@ export class UserInputManager extends EventEmitter {
     return btoa(binary)
   }
 
-  async sendText(text: string): Promise<void> {
-    if (this.capabilities.text) {
-      await this.network.interact(text)
-    } else {
-      this.logger.warn('Text input not supported by current capabilities', this.capabilities)
-    }
+  async interact(request: InteractRequest): Promise<void> {
+    await this.network.interact(request)
   }
 
   async sendInputComplete(): Promise<void> {

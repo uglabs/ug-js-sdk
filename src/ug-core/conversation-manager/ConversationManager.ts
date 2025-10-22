@@ -9,7 +9,7 @@ import {
 } from '../playback-manager/types'
 import { IVADManager } from '../user-input-manager'
 import { VADManager } from '../user-input-manager/VADManager'
-import { ConversationError, ConversationState, InputEnvelope, ConversationConfig } from '../types'
+import { ConversationError, ConversationState, InputEnvelope, ConversationConfig, InteractRequest } from '../types'
 import { UserInputManagerEvents } from '../user-input-manager/types'
 import { ConversationNetwork } from '../network/ConversationNetwork'
 import { PlaybackManager } from '../playback-manager/PlaybackManager'
@@ -124,7 +124,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
   }
 
-  async sendText(text: string): Promise<void> {
+  async interact(request: InteractRequest): Promise<void> {
     if (!this.network.isReady()) {
       const errorMessage = 'Network is not ready, cannot send text. probably disconnected'
       this.logger.error(errorMessage)
@@ -133,7 +133,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     if (this.state === 'idle' || this.state === 'listening') {
       try {
         await this.setState('waiting')
-        await this.userInputManager.sendText(text)
+        await this.userInputManager.interact(request)
       } catch (error) {
         this.logger.error('Error sending text message', error)
         this.handleError('network_timeout', error as Error)
@@ -237,13 +237,16 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       if (message.kind === 'interact' && message.event === 'text') {
         this.config.hooks.onTextMessage?.(message)
       }
+      if(message.event === 'data') {
+        this.config.hooks.onDataMessage?.(message)
+      }
       if (message.kind === 'check_turn' && message.is_user_still_speaking === false) {
         this.logger.debug(`check_turn handler: state is ${this.state}`)
         if (this.state === 'playing' || this.state === 'paused') {
           this.logger.debug('check_turn received while playing / paused, ignoring.')
           return
         }
-        await this.network.interact()
+        await this.network.interactAudio()
         await this.stopListening()
       }
 
