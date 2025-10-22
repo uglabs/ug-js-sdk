@@ -307,7 +307,24 @@ export interface InteractRequest extends Request {
   text?: string
   speakers?: string[]
   context?: Record<string, any>
+  /*
+   * A list of utility names that should be called when user input is available.
+   * Unlike the `on_input` utilities, these are *non-blocking* and their outputs
+   * will not be available in the context for the prompt.
+   */ 
+  on_input_non_blocking?: string[]
+  /*
+   * A list of utility names that should be called when user input is available.
+   * Evaluation of these utilities happens before the prompt is rendered, so that
+   * their values can be used in the prompt.
+   * Note: Use with caution, as this delays the assistant output and everything
+   * that follows (audio output, output utilities, etc.).
+   */
   on_input?: string[]
+  /*
+   * A list of utility names that should be called when assistant output is
+   * available.
+   */
   on_output?: string[]
   audio_output?: boolean
   language_code?: string
@@ -373,4 +390,19 @@ export interface RunRequest extends Request {
 
 export interface RunResponse extends Response {
   kind: 'run'
+}
+
+
+export interface Utility {
+  type: string
+}
+
+
+export interface Classify extends Utility {
+    type: "classify"
+    // The questions is a template like the interaction prompt, and has access to
+    // the context relevant to the stage when it's evaluated.
+    classification_question: string
+    additional_context?: string
+    answers: string[]
 }

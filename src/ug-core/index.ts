@@ -13,6 +13,8 @@ export type {
   StringMessage,
   TextEvent,
   VoiceProfile,
+  Utility,
+  Classify
 } from './types'
 
 export type {
