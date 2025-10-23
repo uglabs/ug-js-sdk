@@ -1,4 +1,4 @@
-import { InteractRequest } from "../types"
+import { InteractRequest } from '../types'
 
 export interface IConversationManager {
   initialize(): Promise<void>

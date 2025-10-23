@@ -16,7 +16,7 @@ export type {
   VoiceProfile,
   AnyUtility,
   Classify,
-  Extract
+  Extract,
 } from './types'
 
 export type {

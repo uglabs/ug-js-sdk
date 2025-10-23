@@ -46,7 +46,7 @@ This is the primary class you will interact with. It simplifies the complex proc
   - Orchestrates the entire conversation flow.
   - Manages state transitions (e.g., from `playing` audio to `listening` for the user).
   - Initializes the WebSocket connection and microphone access.
-  - Provides a high-level API: `initialize()`, `pause()`, `resume()`, `sendText()`, etc.
+  - Provides a high-level API: `initialize()`, `pause()`, `resume()`, `interact()`, etc.
 - **Configuration**: It's instantiated with a `ConversationConfig` object, which is crucial for defining its behavior. The `hooks` property within this config is the primary way the SDK communicates back to your application UI.
 
 ### 🗣️ `ConversationNetwork.ts`
@@ -169,7 +169,12 @@ const handlePlayButtonClick = () => {
 
 const handleSendText = () => {
   if (textInput.trim()) {
-    conversationManagerRef.current?.sendText(textInput)
+    conversationManagerRef.current?.interact({
+      uid: '',
+      kind: 'interact',
+      type: 'stream',
+      text: textInput,
+    })
     setTextInput('')
   }
 }

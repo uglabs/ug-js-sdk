@@ -9,7 +9,13 @@ import {
 } from '../playback-manager/types'
 import { IVADManager } from '../user-input-manager'
 import { VADManager } from '../user-input-manager/VADManager'
-import { ConversationError, ConversationState, InputEnvelope, ConversationConfig, InteractRequest } from '../types'
+import {
+  ConversationError,
+  ConversationState,
+  InputEnvelope,
+  ConversationConfig,
+  InteractRequest,
+} from '../types'
 import { UserInputManagerEvents } from '../user-input-manager/types'
 import { ConversationNetwork } from '../network/ConversationNetwork'
 import { PlaybackManager } from '../playback-manager/PlaybackManager'
@@ -48,12 +54,12 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       },
     }
     // Clone and mask sensitive fields before logging
-    const loggedConfig = { 
-      ...config, 
+    const loggedConfig = {
+      ...config,
       ...(config.apiKey && { apiKey: config.apiKey.slice(0, 4) + '...' }),
-      ...(config.federatedId && { federatedId: config.federatedId.slice(0, 4) + '...' })
+      ...(config.federatedId && { federatedId: config.federatedId.slice(0, 4) + '...' }),
     }
-    logger.info("Initializing with config", loggedConfig)
+    logger.info('Initializing with config', loggedConfig)
     // Dependency injection
     this.network = new ConversationNetwork(config)
     this.vadManager = new VADManager()
@@ -237,7 +243,7 @@ export class ConversationManager extends EventEmitter implements IConversationMa
       if (message.kind === 'interact' && message.event === 'text') {
         this.config.hooks.onTextMessage?.(message)
       }
-      if(message.event === 'data') {
+      if (message.event === 'data') {
         this.config.hooks.onDataMessage?.(message)
       }
       if (message.kind === 'check_turn' && message.is_user_still_speaking === false) {

@@ -158,7 +158,6 @@
 
       await handleAction(async () => {
         await conversationManager.initialize();
-        await conversationManager.startListening();
       });
     });
 
@@ -171,7 +170,7 @@
       if (!conversationManager) return;
       await handleAction(async () => {
         document.getElementById('text').textContent = "";
-        await conversationManager.sendText(textInput.value);
+        await conversationManager.interact({uid:'', kind: 'interact', type: 'stream', text:textInput.value})
         textInput.value = '';
       });
     });
