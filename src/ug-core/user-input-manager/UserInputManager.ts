@@ -15,7 +15,8 @@ import {
  *
  * Supports different types of input:
  * - audio: Voice/audio input through microphone
- * - text: Text input through sendText() method
+ * - text: Text input through interact() method
+ *   eg. interact({uid:'', kind: 'interact', type: 'stream', text:'Your text'})
  **/
 export class UserInputManager extends EventEmitter {
   private audioRecorder: AudioRecorder | null = null

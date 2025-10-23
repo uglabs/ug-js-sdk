@@ -122,7 +122,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
         await this.setConfiguration()
         this.emit(ConversationNetworkEvents.Connected)
         // Initiate a simple . to the engine to get back a response
-        await this.interact({text: '.', uid:'', kind: 'interact', type: 'stream'})
+        await this.interact({ text: '.', uid: '', kind: 'interact', type: 'stream' })
       },
       onMessage: async (message: any) => {
         if (message.uid && this.pendingRequests.has(message.uid)) {
@@ -249,11 +249,11 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   }
 
   async interact(request: InteractRequest): Promise<void> {
-    request.context = { ...this.config.context, ...request.context };
-    request.audio_output = this.config.capabilities?.audio ?? true;
+    request.context = { ...this.config.context, ...request.context }
+    request.audio_output = this.config.capabilities?.audio ?? true
     request.kind = request.kind ?? 'interact'
     request.type = request.type ?? 'stream'
-    await this.makeStreamRequest<Response>(request);
+    await this.makeStreamRequest<Response>(request)
   }
 
   /**
@@ -266,8 +266,8 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
       context: { ...this.config.context },
       audio_output: this.config.capabilities?.audio ?? true,
       uid: '', // will be set by makeStreamRequest
-    };
-    await this.makeStreamRequest<Response>(request);
+    }
+    await this.makeStreamRequest<Response>(request)
   }
 
   async disconnect(): Promise<void> {
