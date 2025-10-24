@@ -5,6 +5,7 @@ export interface IConversationManager {
   startListening(): Promise<void>
   stopListening(): Promise<void>
   interact(request: InteractRequest): Promise<void> // Main place to converse
+  sendText(text: string): Promise<void>
   interrupt(): Promise<void>
   pause(): Promise<void>
   resume(): Promise<void>
