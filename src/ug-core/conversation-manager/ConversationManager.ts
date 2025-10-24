@@ -130,6 +130,10 @@ export class ConversationManager extends EventEmitter implements IConversationMa
     }
   }
 
+  async sendText(text: string): Promise<void> {
+    return this.interact({text, kind: 'interact', type:'stream', uid:''}) //uid will be filled later
+  }
+  
   async interact(request: InteractRequest): Promise<void> {
     if (!this.network.isReady()) {
       const errorMessage = 'Network is not ready, cannot send text. probably disconnected'
