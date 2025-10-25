@@ -174,6 +174,8 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     return this.makeRequestInternal(request, timeoutMs, false)
   }
 
+  // Notice that awaiting here means await till the response is back from the server
+  // As in Request->Response->Promise fulfilled
   private async makeStreamRequest<T extends Response>(
     request: Request,
     timeoutMs = 50000
@@ -253,7 +255,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     request.audio_output = this.config.capabilities?.audio ?? true
     request.kind = request.kind ?? 'interact'
     request.type = request.type ?? 'stream'
-    await this.makeStreamRequest<Response>(request)
+    this.makeStreamRequest<Response>(request)
   }
 
   /**
@@ -267,7 +269,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
       audio_output: this.config.capabilities?.audio ?? true,
       uid: '', // will be set by makeStreamRequest
     }
-    await this.makeStreamRequest<Response>(request)
+    this.makeStreamRequest<Response>(request)
   }
 
   async disconnect(): Promise<void> {
