@@ -133,8 +133,9 @@ export class AudioPlayer extends EventEmitter implements IAudioPlayer {
         const { base64String } = this.chunkQueue.shift()!
         this.chunkAccumulator.push(base64String)
         if (this.chunkAccumulator.length >= this.MIN_CHUNKS_TO_PROCESS) {
-          await this.decodeAndEnqueueChunks(this.chunkAccumulator)
+          const chunksToProcess = this.chunkAccumulator
           this.chunkAccumulator = []
+          await this.decodeAndEnqueueChunks(chunksToProcess)
         }
       }
     } finally {
@@ -358,8 +359,9 @@ export class AudioPlayer extends EventEmitter implements IAudioPlayer {
 
   public async flush(): Promise<void> {
     this.logger.debug('Flushing', { chunks: this.chunkAccumulator.length })
-    await this.decodeAndEnqueueChunks(this.chunkAccumulator)
+    const chunksToProcess = this.chunkAccumulator
     this.chunkAccumulator = []
+    await this.decodeAndEnqueueChunks(chunksToProcess)
   }
 
   public resetAboutToComplete(): void {
