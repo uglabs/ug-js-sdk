@@ -118,11 +118,16 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
   private getWebSocketHandlers(): NetworkEventHandlers {
     return {
       onOpen: async () => {
-        await this.authenticate()
-        await this.setConfiguration()
-        this.emit(ConversationNetworkEvents.Connected)
-        // Initiate a simple . to the engine to get back a response
-        await this.interact({ text: '.', uid: '', kind: 'interact', type: 'stream' })
+        try{
+          await this.authenticate()
+          await this.setConfiguration()
+          this.emit(ConversationNetworkEvents.Connected)
+          // Initiate a simple . to the engine to get back a response
+          await this.interact({ text: '.', uid: '', kind: 'interact', type: 'stream' })
+        }catch(errorResponse: unknown) {
+          const errorMsg = (errorResponse as any)?.error || String(errorResponse);
+          this.emit(ConversationNetworkEvents.Error, new Error(errorMsg));
+        }
       },
       onMessage: async (message: any) => {
         if (message.uid && this.pendingRequests.has(message.uid)) {
@@ -174,8 +179,6 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     return this.makeRequestInternal(request, timeoutMs, false)
   }
 
-  // Notice that awaiting here means await till the response is back from the server
-  // As in Request->Response->Promise fulfilled
   private async makeStreamRequest<T extends Response>(
     request: Request,
     timeoutMs = 50000
@@ -255,7 +258,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
     request.audio_output = this.config.capabilities?.audio ?? true
     request.kind = request.kind ?? 'interact'
     request.type = request.type ?? 'stream'
-    this.makeStreamRequest<Response>(request)
+    await this.makeStreamRequest<Response>(request)
   }
 
   /**
@@ -269,7 +272,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
       audio_output: this.config.capabilities?.audio ?? true,
       uid: '', // will be set by makeStreamRequest
     }
-    this.makeStreamRequest<Response>(request)
+    await this.makeStreamRequest<Response>(request)
   }
 
   async disconnect(): Promise<void> {
