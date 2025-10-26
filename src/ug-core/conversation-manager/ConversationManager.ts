@@ -256,8 +256,8 @@ export class ConversationManager extends EventEmitter implements IConversationMa
           this.logger.debug('check_turn received while playing / paused, ignoring.')
           return
         }
-        await this.network.interactAudio()
         await this.stopListening()
+        await this.network.interactAudio() //await here will wait for the full response and will lock stopListening from reaching in time
       }
 
       // Handle interaction_complete event
