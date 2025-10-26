@@ -62,6 +62,7 @@ export interface ConversationConfig {
     onAvatarAnimationChanged?: (payload: { name: string; layer: number; loop: boolean }) => void
   }
   capabilities?: PlaybackCapabilities
+  safetyPolicy?: string
   inputCapabilities?: InputCapabilities
   logger?: ILogger
   recordingConfig?: AudioRecordingConfig
@@ -260,6 +261,7 @@ export interface Configuration {
   temperature?: number
   utilities?: Record<string, AnyUtility | Reference | null>
   voice_profile?: VoiceProfile
+  safety_policy?: string | Reference | null
 }
 
 export interface Reference {
