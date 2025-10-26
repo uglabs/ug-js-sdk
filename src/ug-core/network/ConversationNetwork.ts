@@ -227,6 +227,7 @@ export class ConversationNetwork extends EventEmitter<any> implements INetwork {
         prompt: this.config.prompt,
         voice_profile: this.config.voiceProfile,
         utilities: this.config.utilities,
+        safety_policy: this.config.safetyPolicy
       },
       uid: '', // will be set by makeRequest
     }
