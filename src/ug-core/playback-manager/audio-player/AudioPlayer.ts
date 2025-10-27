@@ -350,7 +350,8 @@ export class AudioPlayer extends EventEmitter implements IAudioPlayer {
         }
       } catch (error) {
         this.logger.error('Failed to decode audio frames', error)
-        await this.emit(AudioPlayerEvents.Error, error)
+        // We might have some empty frames where we cant decode. logging only to console and ignoring for now.
+        // await this.emit(AudioPlayerEvents.Error, error)
       }
     } else {
       this.logger.debug('decodeAndEnqueueChunks: no frames to decode')
